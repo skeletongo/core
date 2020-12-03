@@ -1,0 +1,18 @@
+{
+  "module" : {
+    "Options" : {
+      "Interval": 100
+    }
+  },
+  "task": {
+    "Options" : {
+      "Interval": 100
+    },
+    "Worker": {
+      "Options" : {
+        "Interval": 100
+      },
+      "WorkerCnt": 5
+    }
+  }
+}

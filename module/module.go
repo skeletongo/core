@@ -7,6 +7,7 @@ import (
 
 	"github.com/skeletongo/core/basic"
 	"github.com/skeletongo/core/log"
+	"github.com/skeletongo/core/timer"
 	"github.com/skeletongo/core/utils"
 )
 
@@ -92,11 +93,12 @@ func (m *moduleMgr) init() {
 	log.Infof("module init...")
 	for e := m.mods.Front(); e != nil; e = e.Next() {
 		mod := e.Value.(*module)
-		log.Infof("module[%16s] init...", mod.mi.Name())
+		log.Infof("module [%16s] init...", mod.mi.Name())
 		mod.safeInit()
-		log.Infof("module[%16s] init[ok]", mod.mi.Name())
+		log.Infof("module [%16s] init[ok]", mod.mi.Name())
 	}
 	log.Infof("module init[ok]")
+
 	m.state = StateUpdate
 }
 
@@ -110,6 +112,10 @@ func (m *moduleMgr) update() {
 func (m *moduleMgr) close() {
 	m.modSign = make(chan string, m.mods.Len())
 
+	// 停止所有定时任务
+	timer.StopAll()
+	log.Infof("timer close")
+
 	log.Infof("module close...")
 	for e := m.mods.Back(); e != nil; e = e.Prev() {
 		mod := e.Value.(*module)
@@ -118,6 +124,7 @@ func (m *moduleMgr) close() {
 		log.Infof("module [%16s] close[ok]", mod.mi.Name())
 	}
 	log.Infof("module close[ok]")
+
 	m.state = StateClosing
 
 	m.t = time.Tick(time.Second)
@@ -153,7 +160,9 @@ func (m *moduleMgr) closing() {
 }
 
 func (m *moduleMgr) closed() {
+	// 关闭根节点
 	basic.Root.Close()
+
 	m.state = StateInvalid
 }
 

@@ -19,12 +19,12 @@ type Callable interface {
 	// Call 需要在另外的协程中执行的方法
 	// o 协程节点，就是这个方法执行的节点
 	// 方法返回值会传递给回调方法
-	Call(o *basic.Object) interface{}
+	Call(o *basic.Object) (ret interface{})
 }
 
-type CallableWrapper func(o *basic.Object) interface{}
+type CallableWrapper func(o *basic.Object) (ret interface{})
 
-func (cw CallableWrapper) Call(o *basic.Object) interface{} {
+func (cw CallableWrapper) Call(o *basic.Object) (ret interface{}) {
 	return cw(o)
 }
 
@@ -34,7 +34,7 @@ type CompleteNotify interface {
 	Done(ret interface{}, t *Task)
 }
 
-type CompleteNotifyWrapper func(interface{}, *Task)
+type CompleteNotifyWrapper func(ret interface{}, t *Task)
 
 func (cnw CompleteNotifyWrapper) Done(ret interface{}, t *Task) {
 	cnw(ret, t)
