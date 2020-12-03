@@ -4,7 +4,7 @@ package network
 import (
 	"errors"
 
-	"code.google.com/p/goprotobuf/proto"
+	"github.com/golang/protobuf/proto"
 )
 
 var ErrorTypeNotFit = errors.New("packet not proto.Message type")

@@ -3,7 +3,7 @@ package utils
 import (
 	"testing"
 
-	"code.google.com/p/goprotobuf/proto"
+	"github.com/golang/protobuf/proto"
 )
 
 type StructD struct {
